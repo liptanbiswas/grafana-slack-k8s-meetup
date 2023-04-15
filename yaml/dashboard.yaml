@@ -1,0 +1,47 @@
+title: Kubernetes Cluster
+
+tags: [generated]
+auto_refresh: 30ss
+
+uid: k8s-cluster-yaml
+
+variables:
+  - interval:
+      name: interval
+      label: Interval
+      values: ["30s", "1m", "5m", "10m", "30m", "1h", "6h", "12h"]
+
+time:
+  - now-30m
+  - now
+
+rows:
+  - name: Overview
+    panels:
+      - graph:
+          title: CPU Utilization by namespace
+          height: 400px
+          datasource: Prometheus
+          targets:
+            - prometheus:
+                query: "sum(rate(container_cpu_usage_seconds_total{image!=\"\"}[$__rate_interval])) by (namespace)"
+                legend: "{{ namespace }}"
+      - graph:
+          title: Memory Utilization by namespace
+          height: 400px
+          datasource: Prometheus
+          axes:
+            left:
+              unit: bytes
+              label: Memory
+          targets:
+            - prometheus:
+                query: "sum(container_memory_working_set_bytes{image!=\"\"}) by (namespace)"
+                legend: "{{ namespace }}"
+      - stat:
+          title: Running Pods
+          height: 400px
+          datasource: Prometheus
+          targets:
+            - prometheus:
+                query: "sum(kube_pod_status_phase{phase='Running'})"
