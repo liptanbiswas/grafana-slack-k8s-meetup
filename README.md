@@ -1,4 +1,6 @@
-# grafana-slack-k8s-meetup
+# GitOps for Grafana dashboards
+
+Create Grafana dashboard in GitOps way.
 
 ## Install dashboards
 
